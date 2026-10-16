@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="nl"><head><meta charset="utf-8"><title>Mini Git-quiz</title>
+<style>
+body{font-family:Segoe UI,Arial,sans-serif;max-width:640px;margin:40px auto;padding:0 20px;color:#1f2933;line-height:1.6}
+button{font:inherit;border:1px solid #b8c2cc;background:#fff;border-radius:8px;padding:8px 14px;cursor:pointer}
+button:hover{background:#f3f5f7}
+.opt{display:block;width:100%;text-align:left;margin:0 0 8px;padding:10px 12px}
+.opt.ok{border-color:#3b8a3b;background:#eaf5e6;color:#215c21}
+.opt.nok{border-color:#c0392b;background:#fbeceb;color:#8e2a20}
+#stap{font-size:13px;color:#5f6b76;margin:0 0 4px}#vraag{font-size:20px;font-weight:600;margin:0 0 14px}
+#uitleg{font-size:14px;color:#5f6b76;min-height:24px}#fout{font-size:13px;color:#c0392b}
+</style></head><body>
+<p id="stap"></p><p id="vraag"></p><div id="opties"></div>
+<p id="uitleg"></p><button id="volgende">Volgende vraag</button><p id="fout"></p>
+<script>
+const Q=[
+{q:'Wat doet git commit?',o:['Stuurt je wijzigingen naar TS-GIT','Legt je klaargezette wijzigingen vast in je lokale repository','Haalt de wijzigingen van collega\'s op'],a:1,u:'Een commit legt een momentopname vast in je lokale repository. Pas met git push deel je hem.'},
+{q:'Wat is een Pull Request?',o:['Een verzoek om een back-up','Een verzoek om je branch na review samen te voegen','Een foutmelding van Git'],a:1,u:'Collega\'s bekijken je wijziging voordat die wordt samengevoegd.'},
+{q:'Wat mag je nooit committen?',o:['Wachtwoorden en tokens','Een README','Tests'],a:0,u:'Een secret blijft in de historie staan, ook als je het later weghaalt.'}];
+let i=0,score=0,gekozen=false;const $=id=>document.getElementById(id);
+function toon(){gekozen=false;$('fout').textContent='';$('uitleg').textContent='';
+ if(i>=Q.length){$('stap').textContent='Klaar';$('vraag').textContent='Score: '+score+' van '+Q.length;$('opties').innerHTML='';$('volgende').textContent='Opnieuw';return}
+ $('stap').textContent='Vraag '+(i+1)+' van '+Q.length;$('vraag').textContent=Q[i].q;
+ $('volgende').textContent=i===Q.length-1?'Toon score':'Volgende vraag';$('opties').innerHTML='';
+ Q[i].o.forEach((t,k)=>{const b=document.createElement('button');b.className='opt';b.textContent=t;b.onclick=()=>kies(k,b);$('opties').appendChild(b)})}
+function kies(k,b){if(gekozen)return;gekozen=true;$('opties').children[Q[i].a].classList.add('ok');
+ if(k===Q[i].a)score++;else b.classList.add('nok');$('uitleg').textContent=Q[i].u}
+$('volgende').onclick=()=>{if(i>=Q.length){i=0;score=0;toon();return}
+ if(!gekozen){$('fout').textContent='Kies eerst een antwoord';return}i++;toon()};
+toon();
+</script></body></html>
